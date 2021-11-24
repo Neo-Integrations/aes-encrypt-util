@@ -1,0 +1,35 @@
+#%RAML 1.0 DataType
+
+type: object
+description: This is generic common error handling
+
+properties:
+  cypherText:
+    type: string
+    description: Cypher text. Mandatory for decyption operation.
+    required: false
+  plainText:
+    required: false
+    type: string
+    description: Plain text. Mandatory for encryption operation.
+  algorithm:
+    enum: ["AES", "Blowfish"]
+    required: false
+    description: The encryption alogorithm
+    default: "AES"
+  mode:
+    enum: ["CBC"]
+    required: false
+    description: The encryption mode
+    default: "CBC"
+  env:
+    enum: ["DEV", "TEST", "PROD"]
+    required: false
+    default: "DEV"
+    description: Enviornment
+  secretKey:
+    type: string
+    required: false
+    description: If provided then it will be used for the cryptography otherwise application configured key will be used
+    
+    

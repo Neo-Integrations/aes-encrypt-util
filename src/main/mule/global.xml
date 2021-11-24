@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="26667d17-799e-4320-9e97-6a18a0eb998e" >
+		<tls:key-store type="jks" path="secrets/githubapp.keystore.jks" alias="githubapp" keyPassword="passw0rd" password="passw0rd" />
+	</tls:context>
+	<http:listener-config name="HTTPS_Listener_config" doc:name="HTTP Listener config" doc:id="6de6cf62-644f-4ccb-bbfc-aa7839c5e19f">
+		<http:listener-connection protocol="HTTPS" host="0.0.0.0" port="8082" tlsContext="TLS_Context"/>
+	</http:listener-config>
+	<apikit:config name="encrypt-util-v1-config" api="api/api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+</mule>

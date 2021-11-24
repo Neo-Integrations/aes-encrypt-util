@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    
+    <flow name="encrypt-util-v1-main">
+        <http:listener config-ref="HTTPS_Listener_config" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 201]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="encrypt-util-v1-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+	<flow name="post:\crypto\decrypt:multipart\form-data:encrypt-util-v1-config">
+        <set-variable value="#[false]" doc:name="Is it Encryption or decryption" doc:id="10e6f84c-9afe-4443-b4dd-2941a3fcb2c4" variableName="encrypt"/>
+		<flow-ref doc:name="extract-variables-subflow" doc:id="997ab987-75a6-4767-b05e-d31ddcac8f55" name="extract-variables-subflow"/>
+		<flow-ref doc:name="decrypt-subflow" doc:id="c28282f1-cc63-4ab9-9110-401024bcf62e" name="decrypt-subflow"/>
+    </flow>
+	<flow name="post:\crypto\encrypt:multipart\form-data:encrypt-util-v1-config">
+        <set-variable value="#[true]" doc:name="Is it Encryption or decryption" doc:id="50891560-c4da-4002-b9c9-8a68a1a7177c" variableName="encrypt" />
+		<flow-ref doc:name="extract-variables-subflow" doc:id="72bd15a7-14f9-4269-9aba-a863316d2f85" name="extract-variables-subflow"/>
+		<flow-ref doc:name="encrypt-subflow" doc:id="f0336406-71c6-4e3c-b10f-677dcbb76ad4" name="encrypt-subflow"/>
+    </flow>
+	<sub-flow name="extract-variables-subflow" doc:id="eb1c23f0-df20-49a0-9eec-02105c832831" >
+		<set-variable value="#[payload.parts['env']['content'] default &quot;DEV&quot;]" doc:name="Extract Env" doc:id="65c7dc18-6fef-4ce2-9354-c96d53916512" variableName="env"/>
+		<ee:transform doc:name="Extract Secret Key" doc:id="23b067b4-9437-415c-9e3a-d0774702a492" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="secretKey" ><![CDATA[%dw 2.0
+output application/java
+---
+if(payload.parts['secretKey']['content'] != null) payload.parts['secretKey']['content']
+else p('app.secret.key.' ++ lower(vars['env']))]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-variable value="#[payload.parts['mode']['content'] default 'CBC']" doc:name="Extract mode" doc:id="9c767d26-d3f1-408b-9859-4df81629a4fb" variableName="mode"/>
+		<set-variable value="#[if(payload.parts['algorithm']['content'] != null) payload.parts['algorithm']['content'] else 'AES']" doc:name="Extract Algorithm" doc:id="45c0f3af-344c-49dc-895d-4aa29b9b0a08" variableName="algo"/>
+		<set-variable value="#[output application/java &#10;---&#10;payload.parts['cypherText']['content'] default null]" doc:name="Extract cypherText" doc:id="77e7364d-9a7f-4c1a-a57e-af954a9b665b" variableName="cypherText"/>
+		<set-variable value="#[output application/java &#10;---&#10;payload.parts['plainText']['content'] default null]" doc:name="Extract plainText" doc:id="554355f2-7913-4549-a495-e871a6e1f57c" variableName="plainText"/>
+		<set-variable value="#[attributes.headers['Accept']]" doc:name="Extract Accept header" doc:id="68c3320d-8512-4018-be15-38f7cf00608b" variableName="accept"/>
+	</sub-flow>
+</mule>

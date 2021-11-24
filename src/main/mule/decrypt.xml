@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="decrypt-subflow" doc:id="12798924-60ce-4c77-8ba1-edfb6c20fa87" >
+		<flow-ref doc:name="decrypt-java-subflow" doc:id="3f7d5f88-97fe-4bb5-9655-f87e89a830ea" name="decrypt-java-subflow"/>
+		<choice doc:name="Choice" doc:id="3dc8599f-ce28-47d4-8e3a-125374263c27" >
+			<when expression="#[vars['accept'] == &quot;application/json&quot;]">
+				<ee:transform doc:name="Transform Message" doc:id="09a5e567-28f3-4d5d-84f3-2c3835be48f6">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	plainText: payload,
+	algorithm: vars['algo'],
+	mode: vars['mode'],
+	env: vars['env']
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="42277338-9366-4c81-88e7-43023dc6a923" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+'<!DOCTYPE html>
+<html>
+<STYLE>
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+</STYLE>
+<body>
+
+<table border="0" align="center" class="styled-table">
+<tr>
+<td>Decrypted Text </td>
+<td>'++ payload ++'</td>
+</tr>
+<tr>
+<td>Mode </td>
+<td>'++ vars['mode'] ++'</td>
+</tr>
+<tr>
+<td>Alogorithm </td>
+<td>'++ vars['algo'] ++'</td>
+</tr>
+<tr>
+<td>Environment </td>
+<td>'++ vars['env'] ++'</td>
+</tr>
+</table>
+
+</body>
+</html>']]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="2e07866f-aac2-4c6e-a7d8-ee87e5bf713d" mimeType="text/html"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+</mule>

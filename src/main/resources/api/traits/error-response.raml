@@ -1,0 +1,159 @@
+#%RAML 1.0 Trait
+usage: Apply this trait to any API that needs to implement the common error handling
+description: Any error encountered within the API would result in the the following responses being generated.
+
+responses:
+  304:
+    description: Not Modified
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 304,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Not Modified",
+              "errorDescription": "Not Modified error description"
+            }
+          }        
+  400:
+    description: Bad Request
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 400,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Bad Request",
+              "errorDescription": "Bad Request error description"
+            }
+          }
+  404:
+    description: Not Found
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 404,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Not Found",
+              "errorDescription": "Not Found error description"
+            }
+          }        
+  405:
+    description: Method Not Allowed
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 405,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Method Not Allowed",
+              "errorDescription": "Method Not Allowed error description"
+            }
+          }        
+  406:
+    description: Not Acceptable
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 406,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Not Acceptable",
+              "errorDescription": "Not Acceptable error description"
+            }
+          }        
+  409:
+    description: Conflict
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 409,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Conflict",
+              "errorDescription": "Conflict error description"
+            }
+          }        
+  415:
+    description: Unsupported Media Type
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 415,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Unsupported Media Type",
+              "errorDescription": "Unsupported Media Type error description"
+            }
+          }        
+  500:
+    description: Internal Server Error
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 500,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Internal Server Error",
+              "errorDescription": "Internal Server Error error description"
+            }
+          }        
+  501:
+    description: Not Implemented
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 501,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Not Implemented",
+              "errorDescription": "Not Implemented error description"
+            }
+          }        
+  502:
+    description: Bad Gateway
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 502,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Bad Gateway",
+              "errorDescription": "Bad Gateway error description"
+            }
+          }        
+  504:
+    description: Gateway Time-out
+    body:
+      application/json:
+        type: !include ../datatypes/common-error-response.raml
+        example:
+          {
+            "error": {
+              "errorCode": 504,
+              "errorDateTime": "2017-12-10T12:10:00Z",
+              "errorMessage": "Gateway Time-out",
+              "errorDescription": "Gateway Time-out error description"
+            }
+          }        

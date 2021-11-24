@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+
+	<sub-flow name="decrypt-java-subflow"
+		doc:id="44022816-8beb-4ed4-8602-1786a526de44">
+		<java:invoke-static
+			doc:name="Decrypt"
+			doc:id="4535840d-4452-49ea-9ddf-5f58d8c41293"
+			class="org.neointegration.crypto.CryptoUtil"
+			outputEncoding="UTF-8" method="decrypt(java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
+			<java:args><![CDATA[#[{
+	arg0: vars['secretKey'] as String,
+	arg1: vars['cypherText'] as String,
+	arg2: vars['mode'] as String,
+	arg3: vars['algo'] as String
+}]]]></java:args>
+		</java:invoke-static>
+	</sub-flow>
+	<sub-flow name="encrypt-java-subflow"
+		doc:id="6ad5c0e8-8178-4b1f-be6e-353fd9e9d7d3">
+		<java:invoke-static
+			doc:name="Encrypt"
+			doc:id="ebf8c0f7-9e7b-42e2-a600-fef67946ead8"
+			class="org.neointegration.crypto.CryptoUtil"
+			outputEncoding="UTF-8" method="encrypt(java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
+			<java:args><![CDATA[#[{
+	arg0: vars['secretKey'] as String,
+	arg1: vars['plainText'] as String,
+	arg2: vars['mode'] as String,
+	arg3: vars['algo'] as String
+}]]]></java:args>
+		</java:invoke-static>
+	</sub-flow>
+
+</mule>

@@ -1,0 +1,4 @@
+{
+  "minMuleVersion": "4.4.0",
+   "secureProperties": ["app.secret.key.dev", "app.secret.key.test", "app.secret.key.prod", "app.secret.key.sit", "app.secret.key.uat"]
+}

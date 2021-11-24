@@ -1,0 +1,17 @@
+#%RAML 1.0 DataType
+
+type: object
+description: This is generic common error handling
+properties:
+  error:
+    type: object
+    required: true
+    properties:
+      errorCode:
+        type: integer
+      errorDateTime:
+        type: datetime
+      errorMessage:
+        type: string
+      errorDescription:
+        type: string

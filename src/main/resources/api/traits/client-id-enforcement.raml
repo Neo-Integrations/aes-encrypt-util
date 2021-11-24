@@ -1,0 +1,12 @@
+#%RAML 1.0 Trait
+usage: Apply this trait to any API that needs to enforce client id Authentication.
+description: The service endpoint requires authentication for every API request.
+headers:
+  client_id:
+    description: The client_id of the API consumer/ requester
+    type: string
+    example: a934bnj3n45ou5i7nln443b54b
+  client_secret:
+    description: The client_secret of the API consumer/ requester
+    type: string
+    example: kjihi56b1212vghc35b34kb45k

@@ -1,0 +1,9 @@
+%dw 2.0
+
+type auto_12798924_60ce_4c77_8ba1_edfb6c20fa87_Output_Payload = {|
+  plainText: String {"typeAlias": "auto_44022816-8beb-4ed4-8602-1786a526de44_Output-Payload"}, 
+  algorithm: Null, 
+  mode: Null, 
+  env: Null
+|}
+

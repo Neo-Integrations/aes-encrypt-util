@@ -1,0 +1,42 @@
+#%RAML 1.0
+title: Clipper Encryption Util
+version: v1
+
+description: This is a utility API to help encrypt and decypt credentials.
+mediaType: application/json
+
+types:
+  commonErrorResponse: !include datatypes/common-error-response.raml
+  cypher: !include datatypes/cypher.raml
+
+traits:
+  clientIdEnforced: !include traits/client-id-enforcement.raml
+  commonErrorHandling: !include traits/error-response.raml
+  
+/crypto:
+  /encrypt:
+    description: Encrypt the input value
+    post:
+      is: [commonErrorHandling]
+      description: Encrypt the input value
+      body:
+        multipart/form-data:
+          type: cypher
+      responses:
+        201:
+          body:
+            application/json:
+              type: cypher
+  /decrypt:
+    description: Decrypt the input value
+    post:
+      is: [commonErrorHandling]
+      description: Encrypt the input value
+      body:
+        multipart/form-data:
+         type: cypher
+      responses:
+        201:
+          body:
+            application/json:
+              type: cypher
